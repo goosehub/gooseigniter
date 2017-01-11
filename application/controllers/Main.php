@@ -12,7 +12,7 @@ class Main extends CI_Controller {
 
 	public function index()
 	{
-        $data['page_title'] = 'Goose Start';
+        $data['page_title'] = site_name();
         $this->load->view('template/header', $data);
 		$this->load->view('main', $data);
 		$this->load->view('template/footer', $data);

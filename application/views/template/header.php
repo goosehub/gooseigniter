@@ -10,6 +10,9 @@
     <!-- Page Title -->
     <title><?php echo $page_title; ?></title>
 
+    <!-- Google please read this -->
+    <meta name="description" content="">
+
     <!-- Link to Favicon -->
     <link rel="icon" href="<?=base_url()?>resources/img/favicon.ico">
 

@@ -7,11 +7,12 @@ Class main_model extends CI_Model
 {
     function select_row($table, $id)
     {
-       $this->db->select('*');
-       $this->db->from($table);
-       $this->db->where('id', $id);
-       $query = $this->db->get();
-       return $query->result_array();
+        $this->db->select('*');
+        $this->db->from($table);
+        $this->db->where('id', $id);
+        $query = $this->db->get();
+        $result = $query->result_array();
+        return isset($result[0]) ? $result[0] : false;
     }
 
     function insert_row($table, $column)

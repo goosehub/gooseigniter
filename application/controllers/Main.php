@@ -7,6 +7,11 @@ class Main extends CI_Controller {
     {
         parent::__construct();
         // $this->load->model('main_model', '', TRUE);
+
+        // $user_flag = 0;
+        // $user_key = 0;
+        // $api_flag = 0;
+        // $this->main_model->insert_request($user_flag, $user_key, $api_flag);
     }
 
 	public function index()

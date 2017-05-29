@@ -29,6 +29,10 @@ class Main extends CI_Controller {
             }
         }
 
+        // A/B testing
+        $ab_array = array('', '');
+        $data['ab_test'] = $ab_array[array_rand($ab_array)];
+
         // Validation errors
         $data['validation_errors'] = $this->session->flashdata('validation_errors');
         $data['failed_form'] = $this->session->flashdata('failed_form');

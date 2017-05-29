@@ -88,6 +88,12 @@ class User extends CI_Controller {
 	// Register
 	public function register()
 	{
+        // Honey post
+        if ($this->input->post('bee_movie')) {
+            redirect(base_url(), 'refresh');
+            return false;
+        }
+        
         // Optional password (For /r/WebGames)
         $matches = 'matches[confirm]|';
         if ($this->password_optional) {
@@ -103,6 +109,7 @@ class User extends CI_Controller {
         $this->form_validation->set_rules('username', 'Username', 'trim|required');
         $this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[6]|max_length[64]|' . $matches . 'callback_register_validation');
         $this->form_validation->set_rules('confirm', 'Confirm', 'trim|required');
+        $this->form_validation->set_rules('ab_test', 'ab_test', 'trim|max_length[32]');
 
         // Fail
         if ($this->form_validation->run() == FALSE) {

@@ -19,6 +19,8 @@
 	        <?php if ($failed_form === 'login') { echo $validation_errors; } ?>
 	        <!-- Form -->
 	        <?php echo form_open('user/login'); ?>
+			  <input type="hidden" name="ab_test" value="<?php echo $ab_test; ?>"/>
+			  <input type="hidden" name="bee_movie" value=""/>
 	          <div class="form-group">
 	            <label for="input_username">Username</label>
 	            <input type="username" class="form-control" id="login_input_username" name="username" placeholder="Username">
@@ -29,7 +31,6 @@
 	          </div>
 	          <button type="submit" class="btn btn-action form-control">Login</button>
 	        </form>
-	        <hr>
 	    </div>
 
 	    <!-- Join Block -->
@@ -67,7 +68,6 @@
 	          </div>
 	          <button type="submit" class="btn btn-action form-control">Start Playing</button>
 	        </form>
-	        <hr>
         </div>
     </div>
     <?php } ?>

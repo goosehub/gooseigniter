@@ -154,6 +154,6 @@ class User extends CI_Controller {
     public function logout()
     {
         $this->session->unset_userdata('logged_in');
-        redirect('?login', 'refresh');
+        redirect(base_url() . '?logged_out=true', 'refresh');
     }
 }

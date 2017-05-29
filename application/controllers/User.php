@@ -12,7 +12,7 @@ class User extends CI_Controller {
 
     // Limits
     protected $login_limit_window = 30;
-    protected $login_limit = 20;
+    protected $login_limit = 5;
 
     // Minutes between registering
     protected $ip_frequency_register = 30;
@@ -21,6 +21,8 @@ class User extends CI_Controller {
 	    parent::__construct();
 	    $this->load->model('main_model', '', TRUE);
         $this->load->model('user_model', '', TRUE);
+
+        $this->main_model->record_result();
 	}
 
 	// Login
@@ -29,9 +31,9 @@ class User extends CI_Controller {
         // Check if this is ip has logged in too many times
         $ip = $_SERVER['REMOTE_ADDR'];
         $timestamp = date('Y-m-d H:i:s', time() - $this->login_limit_window * 60);
-        $route_url = 'check_request_route';
-        $ip_fails = $this->main_model->check_request_route($ip, $route_url, $timestamp);
-        if (count($ip_fails) > $this->login_limit && !is_dev()) {
+        $route_url = 'user/login';
+        $check_request_results = $this->main_model->check_request_route($ip, $route_url, $timestamp);
+        if (count($check_request_results) > $this->login_limit && !is_dev()) {
             echo 'Too many login attempts from this IP. Please wait ' . $this->login_limit_window . ' minutes.';
             die();
         }

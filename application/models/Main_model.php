@@ -5,8 +5,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 Class main_model extends CI_Model
 {
-    function insert_request($user_flag, $user_key, $api_flag)
+    function record_result()
     {
+        $user_flag = 0;
+        $user_key = 0;
+        $api_flag = 0;
+        $session_data = $this->session->userdata('logged_in');
+        if ($session_data) {
+            $user_flag = 1;
+            $user_key = $session_data['id'];
+        }
+        if ($this->input->get('api')) {
+            $api_flag = 1;
+        }
+
         $data = array(
             'user_flag' => $user_flag,
             'user_key' => $user_key,
@@ -25,7 +37,7 @@ Class main_model extends CI_Model
         $this->db->select('*');
         $this->db->from('request');
         $this->db->where('ip', $ip);
-        $this->db->where('route_url', $route_url);
+        $this->db->like('route_url', $route_url);
         $this->db->where('created >', $timestamp);
         $query = $this->db->get();
         return $query->result_array();

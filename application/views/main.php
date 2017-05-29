@@ -11,7 +11,7 @@
     <hr>
 
     <!-- Login Block -->
-    <?php if (!$log_check) { ?>
+    <?php if (!$user) { ?>
     <div class="row">
 	    <div id="login_block" class="col-md-6">
 	        <strong>Login</strong>
@@ -72,7 +72,7 @@
     </div>
     <?php } ?>
 
-    <?php if ($log_check) { ?>
+    <?php if ($user) { ?>
     <a href="<?=base_url()?>user/logout" class="btn btn-danger">Logout</a>
     <?php } ?>
 

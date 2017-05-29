@@ -11,8 +11,22 @@ Class user_model extends CI_Model
     $query = $this->db->get();
     return $query->result_array();
  }
- // Get user
- function get_user($user_id)
+ function get_this_user()
+ {
+    if ($this->session->userdata('logged_in')) {
+        $session_data = $this->session->userdata('logged_in');
+        $user = $this->user_model->get_user_by_id($session_data['id']);
+        if (!isset($user['username'])) {
+            redirect('user/logout', 'refresh');
+            die();
+            return false;
+        }
+        $this->user_loaded($user['id']);
+        return $user;
+    }
+    return false;
+ }
+ function get_user_by_id($user_id)
  {
     $this->db->select('id, username, created');
     $this->db->from('user');
@@ -22,7 +36,6 @@ Class user_model extends CI_Model
     $result = $query->result_array();
     return isset($result[0]) ? $result[0] : false;
  }
- // Login
  function login($username, $password)
  {
     $this->db->select('*');
@@ -37,7 +50,6 @@ Class user_model extends CI_Model
         return false;
     }
  }
- // Register
  function register($username, $password, $auth_token, $email, $ip, $ip_frequency_register, $ab_test)
  {
     // Check for excessive IPs registers
@@ -83,7 +95,6 @@ Class user_model extends CI_Model
         return $user_id;
     }
  }
- // Update user last load
  function user_loaded($user_id)
  {
     $data = array(

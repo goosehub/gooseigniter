@@ -8,26 +8,16 @@ class Main extends CI_Controller {
         parent::__construct();
 
         // Uncomment models after database created
-        // $this->load->model('main_model', '', TRUE);
-        // $this->load->model('user_model', '', TRUE);
+        $this->load->model('main_model', '', TRUE);
+        $this->load->model('user_model', '', TRUE);
 
-        // $this->main_model->record_result();
+        $this->main_model->record_result();
     }
 
     public function index()
     {
         // Authentication
-        $log_check = $data['log_check'] = $data['user'] = false;
-        if ($this->session->userdata('logged_in')) {
-            $log_check = $data['log_check'] = true;
-            $session_data = $this->session->userdata('logged_in');
-            $user_id = $session_data['id'];
-            $data['user'] = $this->user_model->get_user($user_id);
-            if (!isset($data['user']['username'])) {
-                redirect('user/logout', 'refresh');
-                return false;
-            }
-        }
+        $data['user'] = $this->user_model->get_this_user();
 
         // A/B testing
         $ab_array = array('', '');

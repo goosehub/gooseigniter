@@ -24,5 +24,8 @@
     <!-- Local Style -->
     <link href="<?=base_url()?>resources/style.css?<?php echo time(); ?>" rel="stylesheet" type="text/css">
 
+    <!-- Thumbnail -->
+    <meta property="og:image" content="<?=base_url()?>resources/img/placeholder.png" />
+
   </head>
   <body>

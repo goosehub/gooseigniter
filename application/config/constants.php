@@ -2,11 +2,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 // User Auth
-define('PASSWORD_OVERRIDE', false); // Dev and emergencies only
-define('PASSWORD_OPTIONAL', false); // Useful for /r/webgames
-define('REGISTER_IP_FREQUENCY_LIMIT', 30);
-define('LOGIN_LIMIT_WINDOW_MINUTES', 30);
-define('LOGIN_LIMIT_COUNT', 5);
+define('PASSWORD_OVERRIDE', false); // Dev and emergency use only
+define('PASSWORD_OPTIONAL', false); // Useful for /r/webgames which requires no required password logins
+define('REGISTER_IP_FREQUENCY_LIMIT_MINUTES', 30); // Minutes between registration from IP
+define('LOGIN_LIMIT_WINDOW_MINUTES', 30); // Number of minutes during which an IP can login LOGIN_LIMIT_COUNT times
+define('LOGIN_LIMIT_COUNT', 5); // Number of logins allowed in last LOGIN_LIMIT_WINDOW_MINUTES
 
 // File and Directory Modes
 define('FILE_READ_MODE', 0644);

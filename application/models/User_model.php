@@ -36,9 +36,9 @@ Class user_model extends CI_Model
     $result = $query->result_array();
     return isset($result[0]) ? $result[0] : false;
  }
- function login($username, $password)
+ function get_user_and_password($username)
  {
-    $this->db->select('*');
+    $this->db->select('id, username, password');
     $this->db->from('user');
     $this->db->where('username', $username);
     $this->db->limit(1);

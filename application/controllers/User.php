@@ -49,27 +49,27 @@ class User extends CI_Controller {
         $username = $this->input->post('username');
 
         // Compare to database
-        $result = $this->user_model->login($username, $password);
+        $user = $this->user_model->get_user_and_password($username);
 
         // Username not found
-        if (!$result) {
+        if (!$user) {
             $this->form_validation->set_message('login_validation', 'Invalid username or password');
             return false;
         }
 
         // Password does not match
-        else if (!PASSWORD_OVERRIDE && !password_verify($password, $result['password'])) {
+        else if (!PASSWORD_OVERRIDE && !password_verify($password, $user['password'])) {
             $this->form_validation->set_message('login_validation', 'Invalid username or password');
             return false;
         }
 
 		// Success, do login
         $sess_array = array(
-            'id' => $result['id'],
-            'username' => $result['username']
+            'id' => $user['id'],
+            'username' => $user['username']
         );
         $this->session->set_userdata('logged_in', $sess_array);
-        return TRUE;
+        return true;
 	}
 
 	// Register

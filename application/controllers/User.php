@@ -4,19 +4,6 @@ date_default_timezone_set('America/New_York');
 
 class User extends CI_Controller {
 
-    // This is to only be used in difficult to replicate debugging cases 
-    protected $password_override = false;
-
-    // Makes it so passwords will be generated if left empty
-    protected $password_optional = false;
-
-    // Limits
-    protected $login_limit_window = 30;
-    protected $login_limit = 5;
-
-    // Minutes between registering
-    protected $ip_frequency_register = 30;
-
 	function __construct() {
 	    parent::__construct();
 	    $this->load->model('main_model', '', TRUE);
@@ -30,11 +17,11 @@ class User extends CI_Controller {
 	{
         // Check if this is ip has logged in too many times
         $ip = $_SERVER['REMOTE_ADDR'];
-        $timestamp = date('Y-m-d H:i:s', time() - $this->login_limit_window * 60);
+        $timestamp = date('Y-m-d H:i:s', time() - LOGIN_LIMIT_WINDOW_MINUTES * 60);
         $route_url = 'user/login';
         $check_request_results = $this->main_model->check_request_route($ip, $route_url, $timestamp);
-        if (count($check_request_results) > $this->login_limit && !is_dev()) {
-            echo 'Too many login attempts from this IP. Please wait ' . $this->login_limit_window . ' minutes.';
+        if (count($check_request_results) > LOGIN_LIMIT_COUNT && !is_dev()) {
+            echo 'Too many login attempts from this IP. Please wait ' . LOGIN_LIMIT_WINDOW_MINUTES . ' minutes.';
             die();
         }
 
@@ -71,7 +58,7 @@ class User extends CI_Controller {
         }
 
         // Password does not match
-        else if (!$this->password_override && !password_verify($password, $result['password'])) {
+        else if (!PASSWORD_OVERRIDE && !password_verify($password, $result['password'])) {
             $this->form_validation->set_message('login_validation', 'Invalid username or password');
             return false;
         }
@@ -88,7 +75,7 @@ class User extends CI_Controller {
 	// Register
 	public function register()
 	{
-        // Honey post
+        // Honey pot
         if ($this->input->post('bee_movie')) {
             redirect(base_url(), 'refresh');
             return false;
@@ -96,7 +83,7 @@ class User extends CI_Controller {
         
         // Optional password (For /r/WebGames)
         $matches = 'matches[confirm]|';
-        if ($this->password_optional) {
+        if (PASSWORD_OPTIONAL) {
             if (!isset($_POST['password']) || $_POST['password'] === '') {
                 $random_password = mt_rand(10000000,99999999); ;
                 $_POST['password'] = $random_password;
@@ -133,11 +120,11 @@ class User extends CI_Controller {
         $ab_test = $this->input->post('ab_test');
         $ip = $_SERVER['REMOTE_ADDR'];
         $auth_token = $token = bin2hex(openssl_random_pseudo_bytes(16));
-        $user_id = $this->user_model->register($username, $password, $auth_token, $email, $ip, $this->ip_frequency_register, $ab_test);
+        $user_id = $this->user_model->register($username, $password, $auth_token, $email, $ip, REGISTER_IP_FREQUENCY_LIMIT, $ab_test);
 
         // Registered too recently
         if ($user_id === 'ip_fail') {
-            $this->form_validation->set_message('register_validation', 'This IP has already registered in the last ' . $this->ip_frequency_register . ' minutes');
+            $this->form_validation->set_message('register_validation', 'This IP has already registered in the last ' . REGISTER_IP_FREQUENCY_LIMIT . ' minutes');
             return false;
         }
 

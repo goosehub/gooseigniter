@@ -1,14 +1,20 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-/* File and Directory Modes */
+// User Auth
+define('PASSWORD_OVERRIDE', false); // Dev and emergencies only
+define('PASSWORD_OPTIONAL', false); // Useful for /r/webgames
+define('REGISTER_IP_FREQUENCY_LIMIT', 30);
+define('LOGIN_LIMIT_WINDOW_MINUTES', 30);
+define('LOGIN_LIMIT_COUNT', 5);
+
+// File and Directory Modes
 define('FILE_READ_MODE', 0644);
 define('FILE_WRITE_MODE', 0666);
 define('DIR_READ_MODE', 0755);
 define('DIR_WRITE_MODE', 0755);
 
-/* File Stream Modes */
-
+// File Stream Modes
 define('FOPEN_READ', 'rb');
 define('FOPEN_READ_WRITE', 'r+b');
 define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
@@ -18,10 +24,10 @@ define('FOPEN_READ_WRITE_CREATE', 'a+b');
 define('FOPEN_WRITE_CREATE_STRICT', 'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
 
-/* Display Debug backtrace */
-define('SHOW_DEBUG_BACKTRACE', TRUE);
+// Display Debug backtrace
+define('SHOW_DEBUG_BACKTRACE', true);
 
-/* Exit Status Codes */
+// Exit Status Codes
 define('EXIT_SUCCESS', 0); // no errors
 define('EXIT_ERROR', 1); // generic error
 define('EXIT_CONFIG', 3); // configuration error

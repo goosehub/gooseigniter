@@ -51,7 +51,7 @@ Class user_model extends CI_Model
             return false;
         }
     }
-    function register($username, $password, $auth_token, $email, $ip, $register_ip_frequency_limit_minutes, $ab_test)
+    function register($username, $password, $api_key, $email, $ip, $register_ip_frequency_limit_minutes, $ab_test)
     {
         // Check for excessive IPs registers
         $this->db->select('id');
@@ -83,7 +83,7 @@ Class user_model extends CI_Model
             $data = array(
             'username' => $username,
             'password' => password_hash($password, PASSWORD_BCRYPT),
-            'auth_token' => $auth_token,
+            'api_key' => $api_key,
             'email' => $email,
             'ip' => $ip,
             'ab_test' => $ab_test,

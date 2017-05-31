@@ -116,8 +116,8 @@ class User extends CI_Controller {
         $username = $this->input->post('username');
         $ab_test = $this->input->post('ab_test');
         $ip = $_SERVER['REMOTE_ADDR'];
-        $auth_token = $token = bin2hex(openssl_random_pseudo_bytes(16));
-        $user_id = $this->user_model->register($username, $password, $auth_token, $email, $ip, REGISTER_IP_FREQUENCY_LIMIT_MINUTES, $ab_test);
+        $api_key = $token = bin2hex(openssl_random_pseudo_bytes(16));
+        $user_id = $this->user_model->register($username, $password, $api_key, $email, $ip, REGISTER_IP_FREQUENCY_LIMIT_MINUTES, $ab_test);
 
         // Registered too recently
         if ($user_id === 'ip_fail') {

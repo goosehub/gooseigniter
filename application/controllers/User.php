@@ -40,7 +40,7 @@ class User extends CI_Controller {
         // Compare to database
         $username = $this->input->post('username');
         $password = $this->input->post('password');
-        $user = $this->user_model->get_user_auth($username);
+        $user = $this->user_model->get_user_auth_by_username($username);
 
         // Username not found
         if (!$user) {

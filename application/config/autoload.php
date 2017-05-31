@@ -30,10 +30,21 @@ function is_dev() {
     return false;
 }
 
-// Auth Token
+// Get Application Auth Information
 function auth() {
     $auth = json_decode(file_get_contents('auth.php'));
     return $auth;
+}
+
+// Json Structured Error
+function json_error_response($error_code, $error_message) {
+    $json = '
+    {
+        "error": true,
+        "error_code": "' . $error_code . '",
+        "error_message": "' . $error_message . '"
+    }';
+    return $json;
 }
 
 // For turning slugs back into human friendly format

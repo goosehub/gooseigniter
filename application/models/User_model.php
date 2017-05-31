@@ -29,8 +29,14 @@ Class user_model extends CI_Model
         }
 
         // Get user by auth token
-        else if ($this->input->get('api_key')) {
-            $user = $this->user_model->get_user_by_api_key($this->input->get('api_key'));
+        else if ($this->input->get('api') && $this->input->get('user_id') && $this->input->get('api_key')) {
+            $user_auth = $this->user_model->get_user_auth_by_id($this->input->get('user_id'));
+            if (!isset($user_auth['api_key']) || !hash_equals($user_auth['api_key'], $this->input->get('api_key'))) {
+                $this->output->set_status_header(401);
+                echo json_error_response('bad_auth', 'Your user_id, api_key combination was incorrect');
+                die();
+            }
+            $user = $this->get_user_by_id($user_auth['id']);
             $this->user_loaded($user['id']);
         }
 
@@ -47,7 +53,22 @@ Class user_model extends CI_Model
         $result = $query->result_array();
         return isset($result[0]) ? $result[0] : false;
     }
-    function get_user_auth($username)
+    function get_user_auth_by_id($user_id)
+    {
+        $this->db->select('id, username, password, api_key');
+        $this->db->from('user');
+        $this->db->where('id', $user_id);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        if ($query->num_rows() == 1) {
+            $result = $query->result_array();
+            return isset($result[0]) ? $result[0] : false;
+        }
+        else {
+            return false;
+        }
+    }
+    function get_user_auth_by_username($username)
     {
         $this->db->select('id, username, password, api_key');
         $this->db->from('user');

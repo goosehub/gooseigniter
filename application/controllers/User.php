@@ -8,7 +8,7 @@ class User extends CI_Controller {
         $this->load->model('main_model', '', TRUE);
         $this->load->model('user_model', '', TRUE);
 
-        $this->main_model->record_result();
+        $this->main_model->record_request();
     }
 
     // Login

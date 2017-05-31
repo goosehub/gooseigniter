@@ -11,7 +11,7 @@ class Main extends CI_Controller {
         $this->load->model('main_model', '', TRUE);
         $this->load->model('user_model', '', TRUE);
 
-        $this->main_model->record_result();
+        $this->main_model->record_request();
     }
 
     public function index()

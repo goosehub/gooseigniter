@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 Class main_model extends CI_Model
 {
-    function record_result()
+    function record_request()
     {
         $user_flag = 0;
         $user_key = 0;

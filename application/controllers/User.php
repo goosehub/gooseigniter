@@ -24,12 +24,12 @@ class User extends CI_Controller {
             die();
         }
 
-        // Validation
+        // Basic Validation
         $this->load->library('form_validation');
         $this->form_validation->set_rules('username', 'Username', 'trim|required|max_length[32]');
-        $this->form_validation->set_rules('password', 'Password', 'trim|required|max_length[64]|callback_login_validation');
+        $this->form_validation->set_rules('password', 'Password', 'trim|required|max_length[64]');
         
-        // On fail set fail message and redirect to map
+        // Fail Basic Validation
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('failed_form', 'login');
             $this->session->set_flashdata('validation_errors', validation_errors());
@@ -37,38 +37,36 @@ class User extends CI_Controller {
             return false;
         }
 
-        // Success
-        redirect(base_url(), 'refresh');
-    }
-
-    // Validate Login Callback
-    public function login_validation($password)
-    {
-        // Get other parameters
-        $username = $this->input->post('username');
-
         // Compare to database
+        $username = $this->input->post('username');
+        $password = $this->input->post('password');
         $user = $this->user_model->get_user_and_password($username);
 
         // Username not found
         if (!$user) {
-            $this->form_validation->set_message('login_validation', 'Invalid username or password');
+            $this->session->set_flashdata('failed_form', 'login');
+            $this->session->set_flashdata('validation_errors', 'Invalid username or password');
+            redirect(base_url(), 'refresh');
             return false;
         }
 
         // Password does not match
         else if (!PASSWORD_OVERRIDE && !password_verify($password, $user['password'])) {
-            $this->form_validation->set_message('login_validation', 'Invalid username or password');
+            $this->session->set_flashdata('failed_form', 'login');
+            $this->session->set_flashdata('validation_errors', 'Invalid username or password');
+            redirect(base_url(), 'refresh');
             return false;
         }
 
-        // Success, do login
+        // Success, create session
         $sess_array = array(
             'id' => $user['id'],
             'username' => $user['username']
         );
-        $this->session->set_userdata('logged_in', $sess_array);
-        return true;
+        $this->session->set_userdata('user_session', $sess_array);
+
+        // Redirect to homepage
+        redirect(base_url(), 'refresh');
     }
 
     // Register
@@ -139,14 +137,14 @@ class User extends CI_Controller {
             'id' => $user_id,
             'username' => $username
         );
-        $this->session->set_userdata('logged_in', $sess_array);
+        $this->session->set_userdata('user_session', $sess_array);
         return true;
     }
 
     // Logout
     public function logout()
     {
-        $this->session->unset_userdata('logged_in');
+        $this->session->unset_userdata('user_session');
         redirect(base_url() . '?logged_out=true', 'refresh');
     }
 }

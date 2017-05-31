@@ -13,6 +13,10 @@ Class user_model extends CI_Model
     }
     function get_this_user()
     {
+        // Default to user as false
+        $user = false;
+
+        // Get user by session
         if ($this->session->userdata('user_session')) {
             $session_data = $this->session->userdata('user_session');
             $user = $this->user_model->get_user_by_id($session_data['id']);
@@ -22,9 +26,16 @@ Class user_model extends CI_Model
                 return false;
             }
             $this->user_loaded($user['id']);
-            return $user;
         }
-        return false;
+
+        // Get user by auth token
+        else if ($this->input->get('api_key')) {
+            $user = $this->user_model->get_user_by_api_key($this->input->get('api_key'));
+            $this->user_loaded($user['id']);
+        }
+
+        // Return user
+        return $user;
     }
     function get_user_by_id($user_id)
     {
@@ -36,9 +47,9 @@ Class user_model extends CI_Model
         $result = $query->result_array();
         return isset($result[0]) ? $result[0] : false;
     }
-    function get_user_and_password($username)
+    function get_user_auth($username)
     {
-        $this->db->select('id, username, password');
+        $this->db->select('id, username, password, api_key');
         $this->db->from('user');
         $this->db->where('username', $username);
         $this->db->limit(1);

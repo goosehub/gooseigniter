@@ -4,17 +4,17 @@ date_default_timezone_set('America/New_York');
 
 class User extends CI_Controller {
 
-	function __construct() {
-	    parent::__construct();
-	    $this->load->model('main_model', '', TRUE);
+    function __construct() {
+        parent::__construct();
+        $this->load->model('main_model', '', TRUE);
         $this->load->model('user_model', '', TRUE);
 
         $this->main_model->record_result();
-	}
+    }
 
-	// Login
-	public function login()
-	{
+    // Login
+    public function login()
+    {
         // Check if this is ip has logged in too many times
         $ip = $_SERVER['REMOTE_ADDR'];
         $timestamp = date('Y-m-d H:i:s', time() - LOGIN_LIMIT_WINDOW_MINUTES * 60);
@@ -25,27 +25,27 @@ class User extends CI_Controller {
             die();
         }
 
-		// Validation
+        // Validation
         $this->load->library('form_validation');
         $this->form_validation->set_rules('username', 'Username', 'trim|required|max_length[32]');
         $this->form_validation->set_rules('password', 'Password', 'trim|required|max_length[64]|callback_login_validation');
         
-		// On fail set fail message and redirect to map
+        // On fail set fail message and redirect to map
         if ($this->form_validation->run() == FALSE) {
-        	$this->session->set_flashdata('failed_form', 'login');
-        	$this->session->set_flashdata('validation_errors', validation_errors());
+            $this->session->set_flashdata('failed_form', 'login');
+            $this->session->set_flashdata('validation_errors', validation_errors());
             redirect(base_url(), 'refresh');
             return false;
         }
 
         // Success
         redirect(base_url(), 'refresh');
-	}
+    }
 
-	// Validate Login Callback
-	public function login_validation($password)
-	{
-		// Get other parameters
+    // Validate Login Callback
+    public function login_validation($password)
+    {
+        // Get other parameters
         $username = $this->input->post('username');
 
         // Compare to database
@@ -63,18 +63,18 @@ class User extends CI_Controller {
             return false;
         }
 
-		// Success, do login
+        // Success, do login
         $sess_array = array(
             'id' => $user['id'],
             'username' => $user['username']
         );
         $this->session->set_userdata('logged_in', $sess_array);
         return true;
-	}
+    }
 
-	// Register
-	public function register()
-	{
+    // Register
+    public function register()
+    {
         // Honey pot
         if ($this->input->post('bee_movie')) {
             redirect(base_url(), 'refresh');
@@ -92,7 +92,7 @@ class User extends CI_Controller {
             }
         }
 
-		// Validation
+        // Validation
         $this->form_validation->set_rules('username', 'Username', 'trim|required');
         $this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[6]|max_length[64]|' . $matches . 'callback_register_validation');
         $this->form_validation->set_rules('confirm', 'Confirm', 'trim|required');
@@ -100,8 +100,8 @@ class User extends CI_Controller {
 
         // Fail
         if ($this->form_validation->run() == FALSE) {
-        	$this->session->set_flashdata('failed_form', 'register');
-        	$this->session->set_flashdata('validation_errors', validation_errors());
+            $this->session->set_flashdata('failed_form', 'register');
+            $this->session->set_flashdata('validation_errors', validation_errors());
             redirect(base_url(), 'refresh');
             return false;
         }
@@ -109,9 +109,9 @@ class User extends CI_Controller {
         // Success
         $this->session->set_flashdata('just_registered', true);
         redirect(base_url(), 'refresh');
-	}
+    }
 
-	// Validate Register Callback
+    // Validate Register Callback
     public function register_validation($password)
     {
         // Set parameters
@@ -120,11 +120,11 @@ class User extends CI_Controller {
         $ab_test = $this->input->post('ab_test');
         $ip = $_SERVER['REMOTE_ADDR'];
         $auth_token = $token = bin2hex(openssl_random_pseudo_bytes(16));
-        $user_id = $this->user_model->register($username, $password, $auth_token, $email, $ip, REGISTER_IP_FREQUENCY_LIMIT, $ab_test);
+        $user_id = $this->user_model->register($username, $password, $auth_token, $email, $ip, REGISTER_IP_FREQUENCY_LIMIT_MINUTES, $ab_test);
 
         // Registered too recently
         if ($user_id === 'ip_fail') {
-            $this->form_validation->set_message('register_validation', 'This IP has already registered in the last ' . REGISTER_IP_FREQUENCY_LIMIT . ' minutes');
+            $this->form_validation->set_message('register_validation', 'This IP has already registered in the last ' . REGISTER_IP_FREQUENCY_LIMIT_MINUTES . ' minutes');
             return false;
         }
 
@@ -134,7 +134,7 @@ class User extends CI_Controller {
             return false;
         }
 
-		// Login
+        // Login
         $sess_array = array();
         $sess_array = array(
             'id' => $user_id,
@@ -144,7 +144,7 @@ class User extends CI_Controller {
         return true;
     }
 
-	// Logout
+    // Logout
     public function logout()
     {
         $this->session->unset_userdata('logged_in');

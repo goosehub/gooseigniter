@@ -18,7 +18,6 @@ Class main_model extends CI_Model
         if ($this->input->get('api')) {
             $api_flag = 1;
         }
-
         $data = array(
             'user_flag' => $user_flag,
             'user_key' => $user_key,

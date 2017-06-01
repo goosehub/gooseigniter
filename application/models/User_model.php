@@ -33,7 +33,7 @@ Class user_model extends CI_Model
             $user_auth = $this->user_model->get_user_auth_by_id($this->input->get('user_id'));
             if (!isset($user_auth['api_key']) || !hash_equals($user_auth['api_key'], $this->input->get('api_key'))) {
                 $this->output->set_status_header(401);
-                echo json_error_response('bad_auth', 'Your user_id, api_key combination was incorrect');
+                echo api_error_response('bad_auth', 'Your user_id, api_key combination was incorrect');
                 die();
             }
             $user = $this->get_user_by_id($user_auth['id']);

@@ -9,7 +9,8 @@ Class user_model extends CI_Model
         $this->db->select('id, username, created');
         $this->db->from('user');
         $query = $this->db->get();
-        return $query->result_array();
+        $result = $query->result_array();
+        return $result;
     }
     function get_this_user()
     {

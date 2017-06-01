@@ -39,7 +39,8 @@ Class main_model extends CI_Model
         $this->db->like('route_url', $route_url);
         $this->db->where('created >', $timestamp);
         $query = $this->db->get();
-        return $query->result_array();
+        $result = $query->result_array();
+        return $result;
     }
     function select_row($table, $id)
     {

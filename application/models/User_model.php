@@ -23,22 +23,25 @@ Class user_model extends CI_Model
             $user = $this->user_model->get_user_by_id($session_data['id']);
             if (!isset($user['username'])) {
                 redirect('user/logout', 'refresh');
-                die();
+                exit();
                 return false;
             }
             $this->user_loaded($user['id']);
         }
 
-        // Get user by auth token
-        else if ($this->input->get('api') && $this->input->get('user_id') && $this->input->get('api_key')) {
-            $user_auth = $this->user_model->get_user_auth_by_id($this->input->get('user_id'));
-            if (!isset($user_auth['api_key']) || !hash_equals($user_auth['api_key'], $this->input->get('api_key'))) {
-                $this->output->set_status_header(401);
-                echo api_error_response('bad_auth', 'Your user_id, api_key combination was incorrect');
-                die();
+        // Get user by api key
+        else if ($this->input->get('api')) {
+            $input = get_json_post(false);
+            if (isset($input->user_id) && isset($input->api_key)) {
+                $user_auth = $this->user_model->get_user_auth_by_id($input->user_id);
+                if (!isset($user_auth['api_key']) || !hash_equals($user_auth['api_key'], $input->api_key)) {
+                    $this->output->set_status_header(401);
+                    echo api_error_response('bad_auth', 'Your user_id, api_key combination was incorrect');
+                    exit();
+                }
+                $user = $this->get_user_by_id($user_auth['id']);
+                $this->user_loaded($user['id']);
             }
-            $user = $this->get_user_by_id($user_auth['id']);
-            $this->user_loaded($user['id']);
         }
 
         // Return user

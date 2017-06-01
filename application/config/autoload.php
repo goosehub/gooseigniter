@@ -36,6 +36,21 @@ function auth() {
     return $auth;
 }
 
+// Get JSON POST
+function get_json_post($required) {
+    $raw_post = file_get_contents('php://input');
+    if ($required && !$raw_post) {
+        echo api_error_response('no_post', 'POST received was empty.');
+        exit();
+    }
+    $json_post = json_decode($raw_post);
+    if ($required && !$json_post) {
+        echo api_error_response('post_is_not_json', 'POST must be formatted as JSON.');
+        exit();
+    }
+    return $json_post;
+}
+
 // API Error JSON Response
 function api_error_response($error_code, $error_message) {
     log_message('error', $error_code . ' - ' . $error_message);

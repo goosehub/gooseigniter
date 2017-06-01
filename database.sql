@@ -52,7 +52,7 @@ CREATE TABLE `user` (
   `ab_test` varchar(100) NOT NULL,
   `email` varchar(250) NOT NULL,
   `ip` varchar(100) NOT NULL,
-  `auth_token` varchar(250) NOT NULL,
+  `api_key` varchar(250) NOT NULL,
   `password` varchar(250) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

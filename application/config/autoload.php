@@ -24,13 +24,13 @@ function site_name() {
 
 // Return if this is dev
 function is_dev() {
-    if ($_SERVER['HTTP_HOST'] === 'localhost') {
+    if ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === 'dev.foobar.com') {
         return true;
     }
     return false;
 }
 
-// Auth Token
+// Get Application Auth Information
 function auth() {
     $auth = json_decode(file_get_contents('auth.php'));
     return $auth;
@@ -48,6 +48,7 @@ function api_error_response($error_code, $error_message) {
 // API Data JSON Response
 function api_response($data) {
     $data['error'] = false;
+    $data['success'] = true;
     // Encode and send data
     function filter(&$value) {
         if (is_string($value)) {

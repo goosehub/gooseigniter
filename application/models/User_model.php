@@ -13,8 +13,12 @@ Class user_model extends CI_Model
     }
     function get_this_user()
     {
-        if ($this->session->userdata('logged_in')) {
-            $session_data = $this->session->userdata('logged_in');
+        // Default to user as false
+        $user = false;
+
+        // Get user by session
+        if ($this->session->userdata('user_session')) {
+            $session_data = $this->session->userdata('user_session');
             $user = $this->user_model->get_user_by_id($session_data['id']);
             if (!isset($user['username'])) {
                 redirect('user/logout', 'refresh');
@@ -22,9 +26,22 @@ Class user_model extends CI_Model
                 return false;
             }
             $this->user_loaded($user['id']);
-            return $user;
         }
-        return false;
+
+        // Get user by auth token
+        else if ($this->input->get('api') && $this->input->get('user_id') && $this->input->get('api_key')) {
+            $user_auth = $this->user_model->get_user_auth_by_id($this->input->get('user_id'));
+            if (!isset($user_auth['api_key']) || !hash_equals($user_auth['api_key'], $this->input->get('api_key'))) {
+                $this->output->set_status_header(401);
+                echo json_error_response('bad_auth', 'Your user_id, api_key combination was incorrect');
+                die();
+            }
+            $user = $this->get_user_by_id($user_auth['id']);
+            $this->user_loaded($user['id']);
+        }
+
+        // Return user
+        return $user;
     }
     function get_user_by_id($user_id)
     {
@@ -36,9 +53,24 @@ Class user_model extends CI_Model
         $result = $query->result_array();
         return isset($result[0]) ? $result[0] : false;
     }
-    function get_user_and_password($username)
+    function get_user_auth_by_id($user_id)
     {
-        $this->db->select('id, username, password');
+        $this->db->select('id, username, password, api_key');
+        $this->db->from('user');
+        $this->db->where('id', $user_id);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        if ($query->num_rows() == 1) {
+            $result = $query->result_array();
+            return isset($result[0]) ? $result[0] : false;
+        }
+        else {
+            return false;
+        }
+    }
+    function get_user_auth_by_username($username)
+    {
+        $this->db->select('id, username, password, api_key');
         $this->db->from('user');
         $this->db->where('username', $username);
         $this->db->limit(1);
@@ -51,7 +83,7 @@ Class user_model extends CI_Model
             return false;
         }
     }
-    function register($username, $password, $auth_token, $email, $ip, $register_ip_frequency_limit_minutes, $ab_test)
+    function register($username, $password, $api_key, $email, $ip, $register_ip_frequency_limit_minutes, $ab_test)
     {
         // Check for excessive IPs registers
         $this->db->select('id');
@@ -83,7 +115,7 @@ Class user_model extends CI_Model
             $data = array(
             'username' => $username,
             'password' => password_hash($password, PASSWORD_BCRYPT),
-            'auth_token' => $auth_token,
+            'api_key' => $api_key,
             'email' => $email,
             'ip' => $ip,
             'ab_test' => $ab_test,

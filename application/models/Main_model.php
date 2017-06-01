@@ -10,7 +10,7 @@ Class main_model extends CI_Model
         $user_flag = 0;
         $user_key = 0;
         $api_flag = 0;
-        $session_data = $this->session->userdata('logged_in');
+        $session_data = $this->session->userdata('user_session');
         if ($session_data) {
             $user_flag = 1;
             $user_key = $session_data['id'];

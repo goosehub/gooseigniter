@@ -2,10 +2,10 @@
 
 // Local base URL
 if ($_SERVER['HTTP_HOST'] === 'localhost') {
-    $base_url = 'http://localhost/goose_start/';
+    $base_url = 'http://localhost/gooseigniter/';
 }
 else {
-    $base_url = 'http://goose_start.xyz/';
+    $base_url = 'http://gooseigniter.xyz/';
 }
 
 chdir(__DIR__);

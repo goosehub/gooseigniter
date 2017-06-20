@@ -1,6 +1,6 @@
-<h1>goose_start</h1>
+<h1>gooseigniter</h1>
 
-<p>This is a "starting point" I used to start new projects quickly. It is CodeIgniter 3. It includes the following.</p>
+<p>This is a "starting point" I use to start new projects quickly. It uses CodeIgniter 3 as a framework with some additions by myself. It includes the following out of the bow.</p>
 
 <ul>
 	<li>Starting controllers, models, and views in application/controllers, application/model, and application/views</li>

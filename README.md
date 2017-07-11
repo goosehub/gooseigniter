@@ -21,3 +21,11 @@
 	<li>Many reusable function in application/config/autoload.php</li>
 	<li>A <code>.btn-action</code> css class.</li>
 </ul>
+
+<code>auth.php</code> should be handled carefully, per the following steps.
+
+<ul>
+	<li>Update <code>auth.php</code> with the database name.</li>
+	<li>Run <code>git update-index --assume-unchanged auth.php</code> to ensure you can't commit authentication information to your repo.</li>
+	<li>Update <code>auth.php</code> with your real authentication information.</li>
+</ul>

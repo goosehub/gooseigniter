@@ -80,6 +80,13 @@ function deslug($string) {
     return ucwords(str_replace('_', ' ', $string));
 }
 
+// Returns true for ints or strings that are ints
+function validate_int($input)
+{
+    $input = filter_var($input, FILTER_VALIDATE_INT);
+    return is_int($input);
+}
+
 // http://stackoverflow.com/a/5727346/3774582
 // Parse CRON frequency
 // Break it down like James Brown

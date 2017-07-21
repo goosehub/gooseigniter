@@ -6,6 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <h4>A PHP Error was encountered</h4>
 
+<p><strong>Please email goosepostbox@gmail.com with information on this problem</strong></p>
 <p>Severity: <?php echo $severity; ?></p>
 <p>Message:  <?php echo $message; ?></p>
 <p>Filename: <?php echo $filepath; ?></p>

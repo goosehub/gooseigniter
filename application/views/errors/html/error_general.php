@@ -59,6 +59,7 @@ p {
 	<div id="container">
 		<h1><?php echo $heading; ?></h1>
 		<?php echo $message; ?>
+		<p><strong>Please email goosepostbox@gmail.com with information on this problem</strong></p>
 	</div>
 </body>
 </html>

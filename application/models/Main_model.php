@@ -31,16 +31,27 @@ Class main_model extends CI_Model
         $this->db->insert('request', $data);
         return $this->db->insert_id();
     }
-    function check_request_route($ip, $route_url, $timestamp)
+    function count_requests_by_route($ip, $route_url, $timestamp)
     {
-        $this->db->select('*');
+        $this->db->select('COUNT(*) as count');
         $this->db->from('request');
         $this->db->where('ip', $ip);
         $this->db->like('route_url', $route_url);
         $this->db->where('created >', $timestamp);
         $query = $this->db->get();
         $result = $query->result_array();
-        return $result;
+        return isset($result[0]['count']) ? $result[0]['count'] : 0;
+    }
+    function count_requests_by_user_key($user_key, $route_url, $timestamp)
+    {
+        $this->db->select('COUNT(*) as count');
+        $this->db->from('request');
+        $this->db->where('ip', $ip);
+        $this->db->like('route_url', $route_url);
+        $this->db->where('created >', $timestamp);
+        $query = $this->db->get();
+        $result = $query->result_array();
+        return isset($result[0]['count']) ? $result[0]['count'] : 0;
     }
     function select_row($table, $id)
     {

@@ -36,6 +36,17 @@ function auth() {
     return $auth;
 }
 
+// Force HTTPS for non dev
+function force_ssl() {
+    if (!is_dev()) {
+        if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != "on") {
+            $url = "https://". $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+            redirect($url);
+            exit;
+        }
+    }
+}
+
 // Get JSON POST
 function get_json_post($required) {
     $raw_post = file_get_contents('php://input');

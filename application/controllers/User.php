@@ -18,8 +18,8 @@ class User extends CI_Controller {
         $ip = $_SERVER['REMOTE_ADDR'];
         $timestamp = date('Y-m-d H:i:s', time() - LOGIN_LIMIT_WINDOW_MINUTES * 60);
         $route_url = 'user/login';
-        $check_request_results = $this->main_model->check_request_route($ip, $route_url, $timestamp);
-        if (count($check_request_results) > LOGIN_LIMIT_COUNT && !is_dev()) {
+        $count_requests = $this->main_model->count_requests_by_route($ip, $route_url, $timestamp);
+        if ($count_requests > LOGIN_LIMIT_COUNT && !is_dev()) {
             echo 'Too many login attempts from this IP. Please wait ' . LOGIN_LIMIT_WINDOW_MINUTES . ' minutes.';
             exit();
         }

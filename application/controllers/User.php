@@ -122,7 +122,7 @@ class User extends CI_Controller {
         // Disallow usernames we reserve
         if (
             strtolower($username) === 'anonymous' ||
-            strpos(strtolower($username), strtolower('system_')) !== false ||
+            strpos(strtolower($username), strtolower('system')) !== false ||
             strpos(strtolower($username), strtolower('admin')) !== false) {
             $this->form_validation->set_message('register_validation', 'Username is reserved');
             return false;
